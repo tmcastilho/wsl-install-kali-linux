@@ -3,7 +3,6 @@ Windows Wsl Install power shell
 wsl --list
 wsl --install kali-linux
 
-
 Install GUI
 ###########
 sudo apt-get install xfce4
