@@ -1,0 +1,4 @@
+Windows Wsl Listing and Install
+###############################
+wsl --list
+wsl --install kali-linux
