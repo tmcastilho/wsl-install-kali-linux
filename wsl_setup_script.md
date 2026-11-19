@@ -1,36 +1,65 @@
 <#
 .SYNOPSIS
-    Lists installed WSL distributions and installs Kali Linux.
+    Installs Kali Linux via WSL, sets up XFCE4 GUI, and configures XRDP.
 
 .DESCRIPTION
-    This script provides a quick and automated way to list currently available
-    Windows Subsystem for Linux (WSL) distributions and proceed with the
-    installation of Kali Linux via the command line.
-
-.NOTES
-    Author: Your Name
-    Requires: Windows 10/11 with WSL features enabled. Must be run as Administrator.
+    This script automates the installation of Kali Linux on Windows.
+    After the initial setup, it injects commands into the WSL environment
+    to update packages, install the XFCE4 desktop, and start the XRDP service.
 #>
 
-# Clear the screen for a cleaner output
 Clear-Host
 
-Write-Host "################################################" -ForegroundColor Cyan
-Write-Host "#       Windows WSL Listing and Install        #" -ForegroundColor Cyan
-Write-Host "################################################`n" -ForegroundColor Cyan
+Write-Host "###############################" -ForegroundColor Cyan
+Write-Host "# Windows Wsl Install power shell" -ForegroundColor Cyan
+Write-Host "###############################`n" -ForegroundColor Cyan
 
-# 1. List currently installed distributions
-Write-Host "[*] Fetching currently installed WSL distributions..." -ForegroundColor Yellow
-Write-Host "------------------------------------------------" -ForegroundColor DarkGray
+# 1. List current distributions
+Write-Host "[*] Listing current WSL distributions..." -ForegroundColor Yellow
 wsl --list
-Write-Host "------------------------------------------------`n" -ForegroundColor DarkGray
+Write-Host ""
 
 # 2. Install Kali Linux
-Write-Host "[*] Starting the installation of Kali Linux..." -ForegroundColor Yellow
-Write-Host "[!] Note: This may prompt a new window or require a system restart." -ForegroundColor Red
-Write-Host "------------------------------------------------" -ForegroundColor DarkGray
-
+Write-Host "[*] Installing Kali Linux..." -ForegroundColor Yellow
 wsl --install kali-linux
+Write-Host ""
 
-Write-Host "------------------------------------------------`n" -ForegroundColor DarkGray
-Write-Host "[+] Script execution completed." -ForegroundColor Green
+# Pause for user configuration
+Write-Host "##############################################################" -ForegroundColor Red
+Write-Host "[!] ATTENTION: If Kali Linux was just installed, a new window" -ForegroundColor Red
+Write-Host "    has opened for you to create a UNIX username and password." -ForegroundColor Red
+Write-Host "[!] Please complete that setup first." -ForegroundColor Red
+Write-Host "##############################################################`n" -ForegroundColor Red
+Pause
+
+# 3. Install GUI (XFCE4)
+Write-Host "`n###############################" -ForegroundColor Cyan
+Write-Host "# Install GUI" -ForegroundColor Cyan
+Write-Host "###############################`n" -ForegroundColor Cyan
+
+Write-Host "[*] Updating repositories and installing XFCE4..." -ForegroundColor Yellow
+Write-Host "    (You may be prompted to enter your Kali password for sudo)" -ForegroundColor DarkGray
+wsl -d kali-linux -- sudo apt-get update
+# Adding -y to automatically accept the installation size prompt
+wsl -d kali-linux -- sudo apt-get install -y xfce4 
+Write-Host ""
+
+# 4. Install Remote Service (XRDP)
+Write-Host "###############################" -ForegroundColor Cyan
+Write-Host "# Install Remote service" -ForegroundColor Cyan
+Write-Host "###############################`n" -ForegroundColor Cyan
+
+Write-Host "[*] Installing XRDP..." -ForegroundColor Yellow
+wsl -d kali-linux -- sudo apt-get install -y xrdp
+Write-Host ""
+
+# 5. Start XRDP Service
+Write-Host "###############################" -ForegroundColor Cyan
+Write-Host "# Start Service xrdp" -ForegroundColor Cyan
+Write-Host "###############################`n" -ForegroundColor Cyan
+
+Write-Host "[*] Starting the XRDP service..." -ForegroundColor Yellow
+wsl -d kali-linux -- sudo service xrdp start
+
+Write-Host "`n[+] SETUP COMPLETE!" -ForegroundColor Green
+Write-Host "[+] You can now open 'Remote Desktop Connection' in Windows and connect to 'localhost'." -ForegroundColor Green
