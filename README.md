@@ -2,6 +2,8 @@
 
 A complete, well-documented repository containing a PowerShell script to install **Kali Linux** via WSL, set up a graphical user interface (**XFCE4**), and configure a Remote Desktop service (**XRDP**).
 
+![Descrição da Imagem](folder.jpg)
+
 ## 📋 Prerequisites
 
 * **Windows 10** (Version 2004 or higher) or **Windows 11**.
